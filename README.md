@@ -1,11 +1,12 @@
 # HybridHash: Hybrid Convolutional and Self-Attention Deep Hashing for Image Retrieval
---------
+
 ## The Overall Architecture Of HybridHash
 ![brief_architecture](https://github.com/shuaichaochao/HybridHash/assets/49743419/372b311e-1e27-4fc7-bef4-ed1c5b953a17)
 Figure.1. The detailed architecture of the proposed HybridHash. We adopt similar segmentation as ViT to divide the image with finer granularity and feed the generated image patches into the Transformer Block. The whole hybrid network consists of three stages to gradually decrease the resolution and increase the channel dimension. Interaction modules followed by each stage to promote the communication of information about the image blocks. Finally, the binary codes are output after the hash layer.
 
----------------
+
 ## Image Retrieval Related Work Instructions
+
 There are three main types of prevailing image retrieval hashing methods, which are symmetric Deep Supervised Hashing, Asymmetric Deep Supervised Hashing and Center Similarity Deep Supervised Hashing. They are different. 
 ### Symmetric Deep Supervised Hashing in Image Retrieval
 Due to the rapid development of deep learning, deep supervised hashing methods have achieved superior performance on image retrieval tasks. The majority of these methods are symmetric deep supervised hashing methods such as CNNH[1], DSH[2], DNNH[3], HashNet[4], DCH[5], etc., which exploit the similarity or dissimilarity between pairs of images to learn one deep hash function for query images and database (retrieval) images. Symmetric deep supervised hashing methods utilize only fewer training images and supervised information to obtain superior performance, which have been preferred by many researchers.
@@ -17,18 +18,17 @@ All of the above deep supervised hashing methods learn hash functions by capturi
 
 Therefore the above three types of methods are not generally compared at the same time since it is an unfair comparison. Our proposed HybridHash belongs to the first type of hashing methods mentioned above and hence also compared with only the state-of-the-art hashing methods in the first type.
 
------------------------------
 ## Datasets
 
-The following references are also derived from a [swuxyj]
+The following references are also derived from a [swuxyj](https://github.com/swuxyj/DeepHash-pytorch)
 
 There are three different configurations for cifar10
 
-    config["dataset"]="cifar10" will use 1000 images (100 images per class) as the query set, 5000 images( 500 images per class) as training set , the remaining 54,000 images are used as database.
+   * config["dataset"]="cifar10" will use 1000 images (100 images per class) as the query set, 5000 images( 500 images per class) as training set , the remaining 54,000 images are used as database.
     
-    config["dataset"]="cifar10-1" will use 1000 images (100 images per class) as the query set, the remaining 59,000 images are used as database, 5000 images( 500 images per class) are randomly sampled from the database as training set.
+   * config["dataset"]="cifar10-1" will use 1000 images (100 images per class) as the query set, the remaining 59,000 images are used as database, 5000 images( 500 images per class) are randomly sampled from the database as training set.
     
-    config["dataset"]="cifar10-2" will use 10000 images (1000 images per class) as the query set, 50000 images( 5000 images per class) as training set and database.
+   * config["dataset"]="cifar10-2" will use 10000 images (1000 images per class) as the query set, 50000 images( 5000 images per class) as training set and database.
 
 You can download NUS-WIDE [here](https://github.com/swuxyj/DeepHash-pytorch)
 
@@ -42,7 +42,6 @@ NUS-WIDE-m is different from NUS-WIDE, so i made a distinction.
 
 NUS-WIDE-m has 223,496 images which are associated with 81 concepts, and NUS-WIDE-m is used in HashNet(ICCV2017). Of these, removing the incorrectly labeled images, there are 173692 images, including 5000 images for the test set and the rest for the retrieval set.
 
---------------
 ## Reference
 [1] Xia, R.K., Pan, Y., Lai, H.J., Liu, C., Yan, S.C.: Supervised Hashing for Image Retrieval via Image Representation Learning. In: Proceedings of the Twenty-Eighth AAAI Conference on Artificial Intelligence (AAAI), pp. 2156-2162. AAAI, (2014)
 
