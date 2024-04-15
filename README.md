@@ -1,4 +1,4 @@
-# HybridHash: Hybrid Convolutional and Self-Attention Deep Hashing for Image Retrieval
+# HybridHash: Hybrid Convolutional and Self-Attention Deep Hashing for Image Retrieval (ICMR 2024)
 
 ## The Overall Architecture Of HybridHash
 ![brief_architecture](https://github.com/shuaichaochao/HybridHash/assets/49743419/372b311e-1e27-4fc7-bef4-ed1c5b953a17)
