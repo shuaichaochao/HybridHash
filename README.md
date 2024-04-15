@@ -16,3 +16,13 @@ Therefore the above three types of methods are not generally compared at the sam
 
 ## Reference
 [1] Xia, R.K., Pan, Y., Lai, H.J., Liu, C., Yan, S.C.: Supervised Hashing for Image Retrieval via Image Representation Learning. In: Proceedings of the Twenty-Eighth AAAI Conference on Artificial Intelligence (AAAI), pp. 2156-2162. AAAI, (2014)
+[2] Liu, H., Wang, R., Shan, S., Chen. X.: Deep supervised hashing for fast image retrieval. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 2064–2072. IEEE, (2016)
+[3] Lai, H., Pan, Y., Liu, Y., Yan, S.: Simultaneous feature learning and hash coding with deep neural networks. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 3270–3278. IEEE, (2015)
+[4] Cao, Z.J., Long, M.S., Wang, J. M., Yu, P.S.: HashNet: Deep Learning to Hash by Continuation. In: Proceedings of the IEEE International Conference on Computer Vision (ICCV), pp. 5609-5618. IEEE, (2017)
+[5] Cao, Y., Long, M.S., Liu, B., Wang, J.M.: Deep Cauchy Hashing for Hamming Space Retrieval. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 1229-1237. IEEE, (2018)
+[6] Jiang, Q.Y., Li, W.J.: Asymmetric Deep Supervised Hashing. In: Proceedings of the Thirty-Second AAAI Conference on Artificial Intelligence (AAAI), pp. 3342-3349. AAAI, (2018)
+[7] Ma, L, Li, H.L., Meng, F.M., Wu, Q.B., Ngan, K.N.: Discriminative deep metric learning for asymmetric discrete hashing. Neurocomputing 380, 115-124 (2020)
+[8] Gu, G.H., Liu, J.T., Li, Z.Y., Huo, W.H., Zhao, Y.:Joint learning based deep supervised hashing for large-scale image retrieval. Neurocomputing 385, 348-357 (2020)
+[9] Yuan, L., Wang, T., Zhang, X.P., Tay, E.H., Jie, Z.Q., Liu, W., Feng, J.S.: Central Similarity Quantization for Efficient Image and Video Retrieval. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), pp. 3080-3089. IEEE, (2020)
+[10] Liangdao Wang, Yan Pan, Cong Liu, Hanjiang Lai, Jian Yin, and Ye Liu, “Deep hashing with minimal-distance-separated hash centers,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition, 2023, pp. 23455–
+23464.
