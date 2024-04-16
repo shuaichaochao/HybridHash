@@ -10,7 +10,6 @@ import time
 # import numpy as np
 from loguru import logger
 from model.HybridHash import HybridHash
-from model.vit import VisionTransformer, CONFIGS
 # from torch.autograd import Variable
 from ptflops import get_model_complexity_info
 # from apex import amp
@@ -26,9 +25,7 @@ def get_config():
 
         # "optimizer":{"type":  optim.SGD, "optim_params": {"lr": 1e-4, "weight_decay": 1e-5}, "lr_type": "step"},
         "optimizer": {"type": optim.RMSprop, "optim_params": {"lr": 2.5e-5, "weight_decay": 1e-5}, "lr_type": "step"},
-        # "info": "[NestNet_newattn]",
-        # "info": "[NestNet]",
-        "info": "[MambaHash]",
+        "info": "[HybridHash]",
         "step_continuation": 20,
         "resize_size": 256,
         "crop_size": 224,
@@ -53,8 +50,6 @@ def get_config():
         "patch_size": 4,
         "in_chans": 3,
         "num_work": 4,
-        "model_type": "ViT-L_16",
-        "top_img": 10
     }
     config = config_dataset(config)
     return config
@@ -62,20 +57,11 @@ def get_config():
 
 def train_val(config, bit):
     # Prepare model
-    # configs = CONFIGS[config["model_type"]]
 
     device = config["device"]
     train_loader, test_loader, dataset_loader, num_train, num_test, num_dataset = get_data(config)
     config["bit"] = bit
     # net = config["net"](bit).to(device)
-    # # 加入映射的hash位数（Add hash bits）
-    # net = VisionTransformer(configs, config["img_size"], num_classes=config["n_class"], vis=True, hash_bit = config["bit"])
-    # #
-    # logger.info('Loading: %s' %config["pretrained_dir"])
-    #
-    # # print(datetime.datetime.now())
-    # net.load_from(np.load(config["pretrained_dir"]))
-    # logger.info('Pretrain weights loaded.')
 
     net = HybridHash(config, num_levels=3, embed_dims=(128, 256, 512), num_heads=(4, 8, 16), depths=(2, 2, 15))
     if config["pretrained_dir"] is not None:
@@ -99,14 +85,6 @@ def train_val(config, bit):
 
     #原声自带apex训练
     scaler = GradScaler()
-
-    # apex加速训练
-    # help="For fp16: Apex AMP optimization level selected in ['O0', 'O1', 'O2', and 'O3'].
-    # See details at https://nvidia.github.io/apex/amp.html"
-    # net, optimizer = amp.initialize(models=net,
-    #                                   optimizers=optimizer,
-    #                                   opt_level='O1')
-    # amp._amp_state.loss_scalers[0]._loss_scale = 2 ** 20
 
     criterion = HashNetLoss(config, bit)
 
@@ -136,14 +114,6 @@ def train_val(config, bit):
                 loss = criterion(u, label.float(), ind, config)
 
             train_loss += loss.item()
-
-            # apex加速训练
-            # with amp.scale_loss(loss, optimizer) as scaled_loss:
-            #     scaled_loss.backward()
-
-            # loss.backward()
-
-            # optimizer.step()
 
             #原生自带apex
             scaler.scale(loss).backward()
