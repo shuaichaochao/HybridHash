@@ -50,6 +50,8 @@ def get_config():
         "patch_size": 4,
         "in_chans": 3,
         "num_work": 4,
+        # The parameter for the sequence number of the first n images returned
+        "top_img":10,
     }
     config = config_dataset(config)
     return config
