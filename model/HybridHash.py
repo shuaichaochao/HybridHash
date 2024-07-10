@@ -48,17 +48,17 @@ class HashLayer(nn.Module):
     def __init__(self, config, hash_bit):
         super(HashLayer, self).__init__()
 
-        # self.convS1 = nn.Conv2d(config, config, (1, 3), padding=(0, 1))
-        # self.convS2 = nn.Conv2d(config, config, (3, 1), padding=(1, 0))
+        self.convS1 = nn.Conv2d(config, config, (1, 3), padding=(0, 1))
+        self.convS2 = nn.Conv2d(config, config, (3, 1), padding=(1, 0))
         #
-        # # 不同的池化核大小可得到不同数量的BTs
-        # # Different pooling kernel sizes yield different numbers of BTs
-        # # self.pool_glo = create_pool2d('avg', kernel_size=7, stride=7, padding=0)
-        # # self.global_attention = Interactive_Attention(config, num_heads=8, seq_length=4)
-        # # self.upsample = nn.Upsample(scale_factor=7, mode='bilinear', align_corners=False)
-        # self.pool_glo = create_pool2d('avg', kernel_size=14, stride=14, padding=0)
-        # self.global_attention = Interactive_Attention(config, num_heads=8, seq_length=1)
-        # self.upsample = nn.Upsample(scale_factor=14, mode='bilinear', align_corners=False)
+        # 不同的池化核大小可得到不同数量的BTs
+        # Different pooling kernel sizes yield different numbers of BTs
+        # self.pool_glo = create_pool2d('avg', kernel_size=7, stride=7, padding=0)
+        # self.global_attention = Interactive_Attention(config, num_heads=8, seq_length=4)
+        # self.upsample = nn.Upsample(scale_factor=7, mode='bilinear', align_corners=False)
+        self.pool_glo = create_pool2d('avg', kernel_size=14, stride=14, padding=0)
+        self.global_attention = Interactive_Attention(config, num_heads=8, seq_length=1)
+        self.upsample = nn.Upsample(scale_factor=14, mode='bilinear', align_corners=False)
 
         self.maxpool = nn.MaxPool2d(3, stride=2, padding=(1,1))
         self.conv2 = nn.Conv2d(config, hash_bit, 1)
@@ -68,21 +68,19 @@ class HashLayer(nn.Module):
 
     def forward(self, feature):
         # local interaction
-        # hash_re = self.convS1(feature)
-        # hash_re = self.convS2(hash_re)
+        hash_re = self.convS1(feature)
+        hash_re = self.convS2(hash_re)
         #
         # Global interaction
-        # hash_global = self.pool_glo(feature)
-        # hash_global = self.global_attention(hash_global)
-        # hash_global = hash_global.permute(0, 3, 1, 2)
-        # hash_global = self.upsample(hash_global)
+        hash_global = self.pool_glo(feature)
+        hash_global = self.global_attention(hash_global)
+        hash_global = hash_global.permute(0, 3, 1, 2)
+        hash_global = self.upsample(hash_global)
         #
         # fusion
-        # hash_re = hash_global+hash_re
+        hash_re = hash_global+hash_re
 
-
-        # no interaction
-        hash_re = self.maxpool(feature)
+        hash_re = self.maxpool(hash_re)
         hash_re = self.conv2(hash_re)
         hash_re = self.avgpool(hash_re)
         hash_re = torch.flatten(hash_re, start_dim=1, end_dim=3)
@@ -195,16 +193,16 @@ class Interactive_Attention(nn.Module):
 class Interactive_Module(nn.Module):
     def __init__(self, in_channels, out_channels, norm_layer, pad_type='', num_blocks=0):
         super().__init__()
-        self.conv1 = create_conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=pad_type, bias=True)
-        # self.conv = create_conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=pad_type, bias=True)
+        # self.conv1 = create_conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=pad_type, bias=True)
+        self.conv = create_conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=pad_type, bias=True)
 
-        # self.conv_glo = create_conv2d(in_channels, out_channels, kernel_size=1, padding=0, bias=False)
+        self.conv_glo = create_conv2d(in_channels, out_channels, kernel_size=1, padding=0, bias=False)
         # # self.pool_glo = create_pool2d('avg', kernel_size=7, stride=7, padding=0)
         # # self.global_attention = Interactive_Attention(out_channels, num_heads=8, seq_length=num_blocks*16)
         # # self.upsample = nn.Upsample(scale_factor=7, mode='bilinear', align_corners=False)
-        # self.pool_glo = create_pool2d('avg', kernel_size=14, stride=14, padding=0)
-        # self.global_attention = Interactive_Attention(out_channels, num_heads=8, seq_length=num_blocks * 4)
-        # self.upsample = nn.Upsample(scale_factor=14, mode='bilinear', align_corners=False)
+        self.pool_glo = create_pool2d('avg', kernel_size=14, stride=14, padding=0)
+        self.global_attention = Interactive_Attention(out_channels, num_heads=8, seq_length=num_blocks * 4)
+        self.upsample = nn.Upsample(scale_factor=14, mode='bilinear', align_corners=False)
 
         self.norm = norm_layer(out_channels)
         self.pool = create_pool2d('max', kernel_size=3, stride=2, padding=pad_type)
@@ -214,25 +212,25 @@ class Interactive_Module(nn.Module):
         x is expected to have shape (B, C, H, W)
         """
         # Global interaction
-        # x_global = self.conv_glo(x)
-        # x_global = self.pool_glo(x_global)
-        # x_global = self.global_attention(x_global)
-        # x_global = x_global.permute(0, 3, 1, 2)
-        # x_global = self.upsample(x_global)
+        x_global = self.conv_glo(x)
+        x_global = self.pool_glo(x_global)
+        x_global = self.global_attention(x_global)
+        x_global = x_global.permute(0, 3, 1, 2)
+        x_global = self.upsample(x_global)
         # #
         # local interaction
-        # x_min = self.conv(x)
-        # #
-        # # # fusion
-        # x = x_min+x_global
+        x_min = self.conv(x)
+        #
+        # fusion
+        x = x_min+x_global
         # x = x_min
-        # w_channel = self.norm(x.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
-        # w_channel = self.pool(w_channel)
-
-        # no interaction
-        x = self.conv1(x)
         w_channel = self.norm(x.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
         w_channel = self.pool(w_channel)
+
+        # no interaction
+        # x = self.conv1(x)
+        # w_channel = self.norm(x.permute(0, 2, 3, 1)).permute(0, 3, 1, 2)
+        # w_channel = self.pool(w_channel)
 
         return w_channel  # (B, C, H//2, W//2)
 
