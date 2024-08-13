@@ -391,9 +391,9 @@ class HybridHash(nn.Module):
 
         self.hashlayer_train = HashLayer(self.num_features, config["bit"])
 
-        self.avgpool = nn.AdaptiveAvgPool2d(1)
-        self.FcLayer = nn.Linear(embed_dims[-1], config["bit"])
-        self.act = nn.Tanh()
+        # self.avgpool = nn.AdaptiveAvgPool2d(1)
+        # self.FcLayer = nn.Linear(embed_dims[-1], config["bit"])
+        # self.act = nn.Tanh()
 
         self.init_weights(weight_init)
 
